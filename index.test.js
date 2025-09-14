@@ -96,3 +96,22 @@ it('ignore gradients with incorrect transition function syntax set', () => {
     {}
   )
 })
+
+/**
+ * Should ignore @keyframes rules to prevent CSS corruption
+ */
+it('ignore gradients inside @keyframes rules', () => {
+  return run(
+    '@keyframes fadeIn { 0% { opacity: 0; background: linear-gradient(to right, red, ease, blue); } 100% { opacity: 1; background: linear-gradient(to right, red, ease, blue); } }',
+    '@keyframes fadeIn { 0% { opacity: 0; background: linear-gradient(to right, red, ease, blue); } 100% { opacity: 1; background: linear-gradient(to right, red, ease, blue); } }',
+    {}
+  )
+})
+
+it('ignore gradients inside @keyframes but process regular gradients', () => {
+  return run(
+    '@keyframes slideIn { from { background: linear-gradient(45deg, red, ease, blue); } to { background: linear-gradient(45deg, red, ease, blue); } } .test { background: linear-gradient(to right, green, ease, red); }',
+    '@keyframes slideIn { from { background: linear-gradient(45deg, red, ease, blue); } to { background: linear-gradient(45deg, red, ease, blue); } } .test { background: linear-gradient(to right, hsl(120, 100%, 25.1%), hsl(95.38, 100%, 24.58%) 5.79%, hsl(78.24, 100%, 23.69%) 10.88%, hsl(60.53, 100%, 22.47%) 15.63%, hsl(45.6, 100%, 27.55%) 20.37%, hsl(35.49, 100%, 32.35%) 25.46%, hsl(27.94, 100%, 36.66%) 31.25%, hsl(21.9, 100%, 40.44%) 38.08%, hsl(16.79, 100%, 43.67%) 46.3%, hsl(12.26, 100%, 46.31%) 56.25%, hsl(8.08, 100%, 48.29%) 68.29%, hsl(4.05, 100%, 49.55%) 82.75%, hsl(0, 100%, 50%)); }',
+    {}
+  )
+})

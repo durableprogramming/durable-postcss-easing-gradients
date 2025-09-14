@@ -14,6 +14,11 @@ module.exports = function(options = {}) {
   return {
     postcssPlugin: 'easing-gradient',
     Rule(rule) {
+      // Skip @keyframes rules to avoid corrupting animations
+      if (rule.parent && rule.parent.type === 'atrule' && rule.parent.name === 'keyframes') {
+        return
+      }
+      
       rule.walkDecls(decl => {
         // If declaration value contains a -gradient.
         if (decl.value.includes('-gradient')) {
