@@ -7,12 +7,13 @@ const helpers = require('./lib/helpers.js')
 /**
  * The easing gradient function is a postcss plugin which supports the in /.helpers mentioned gradient types.
  */
-module.exports = postcss.plugin('easing-gradient', (options = {}) => {
+module.exports = function(options = {}) {
   if (!options.stops) {
     options.stops = 13
   }
-  return function(css) {
-    css.walkRules(rule => {
+  return {
+    postcssPlugin: 'easing-gradient',
+    Rule(rule) {
       rule.walkDecls(decl => {
         // If declaration value contains a -gradient.
         if (decl.value.includes('-gradient')) {
@@ -60,6 +61,7 @@ module.exports = postcss.plugin('easing-gradient', (options = {}) => {
           })
         }
       })
-    })
+    }
   }
-})
+}
+module.exports.postcss = true
