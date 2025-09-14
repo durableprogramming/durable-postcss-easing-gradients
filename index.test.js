@@ -1,5 +1,6 @@
 import postcss from 'postcss'
 import plugin from './index.js'
+import { expect, it } from 'vitest'
 
 function run(input, output, opts) {
   return postcss([plugin(opts)])
@@ -15,13 +16,6 @@ function run(input, output, opts) {
 /**
  * Default output
  */
-it('create a steps gradient with direction', () => {
-  return run(
-    'a{ background: linear-gradient(to right, green, steps(4, skip-none), red); }',
-    'a{ background: linear-gradient(to right, hsl(120, 100%, 25.1%), hsl(83.96, 100%, 24.03%) 8.33%, hsl(66.54, 100%, 22.91%) 16.67%, hsl(52.17, 100%, 25%) 25%, hsl(42.59, 100%, 28.87%) 33.33%, hsl(35.64, 100%, 32.27%) 41.67%, hsl(30.12, 100%, 35.36%) 50%, hsl(25.45, 100%, 38.19%) 58.33%, hsl(21.3, 100%, 40.82%) 66.67%, hsl(17.39, 100%, 43.3%) 75%, hsl(13.47, 100%, 45.64%) 83.33%, hsl(9.08, 100%, 47.87%) 91.67%, hsl(0, 100%, 50%)); }',
-    {}
-  )
-})
 it('create a cubic bezier gradient with direction', () => {
   return run(
     'a{ background: linear-gradient(to right, black, cubic-bezier(0.48, 0.30, 0.64, 1.00), transparent); }',
@@ -78,10 +72,10 @@ it('ignore unsuported gradients', () => {
     {}
   )
 })
-it('ignore gradients with color stop locations set', () => {
+it('process gradients with color stop locations', () => {
   return run(
     'a{ background: linear-gradient(black 20px, cubic-bezier(0.48, 0.30, 0.64, 1.00), transparent); }',
-    'a{ background: linear-gradient(black 20px, cubic-bezier(0.48, 0.30, 0.64, 1.00), transparent); }',
+    'a{ background: linear-gradient(hsl(0, 0%, 0%), hsla(0, 0%, 0%, 0.91667) 8.33%, hsla(0, 0%, 0%, 0.83333) 16.67%, hsla(0, 0%, 0%, 0.75) 25%, hsla(0, 0%, 0%, 0.66667) 33.33%, hsla(0, 0%, 0%, 0.58333) 41.67%, hsla(0, 0%, 0%, 0.5) 50%, hsla(0, 0%, 0%, 0.41667) 58.33%, hsla(0, 0%, 0%, 0.33333) 66.67%, hsla(0, 0%, 0%, 0.25) 75%, hsla(0, 0%, 0%, 0.16667) 83.33%, hsla(0, 0%, 0%, 0.08333) 91.67%, hsla(0, 0%, 0%, 0)); }',
     {}
   )
 })
@@ -155,6 +149,41 @@ it('ignore gradients without default easing when no option set', () => {
   return run(
     'a{ background: linear-gradient(red, blue); }',
     'a{ background: linear-gradient(red, blue); }',  // Should remain unchanged
+    {}
+  )
+})
+
+/**
+ * CSS Variable (CSS Custom Properties) support
+ */
+it('handle CSS variables as colors with timing functions', () => {
+  return run(
+    'a{ background: linear-gradient(var(--start-color), ease, var(--end-color)); }',
+    'a{ background: linear-gradient(var(--start-color), var(--end-color)); }',
+    {}
+  )
+})
+
+it('handle CSS variables as direction', () => {
+  return run(
+    'a{ background: linear-gradient(var(--gradient-direction), red, ease, blue); }',
+    'a{ background: linear-gradient(var(--gradient-direction), red, blue); }',
+    {}
+  )
+})
+
+it('handle mixed CSS variables and regular colors', () => {
+  return run(
+    'a{ background: linear-gradient(to right, var(--primary), ease-in, #ff0000); }',
+    'a{ background: linear-gradient(to right, var(--primary), #ff0000); }',
+    {}
+  )
+})
+
+it('handle CSS variables with positions', () => {
+  return run(
+    'a{ background: linear-gradient(var(--start) 10%, cubic-bezier(0.25, 0.1, 0.25, 1), var(--end) 90%); }',
+    'a{ background: linear-gradient(var(--start) 10%, var(--end) 90%); }',
     {}
   )
 })

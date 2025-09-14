@@ -1,34 +1,28 @@
 import valueParser from 'postcss-value-parser'
 import getColorStops, { isAdvancedEasing, getAdvancedColorStops, generateCoordinates } from './lib/colorStops.js'
-import { isTimingFunctionSync, isDirection, divToSemiColon, errorMsg } from './lib/helpers.js'
+import { isTimingFunctionSync, isDirection, divToSemiColon, errorMsg, isCSSVariable } from './lib/helpers.js'
+import { extractColorStops } from './lib/extract/color_stops.js'
+import { extractAllEasingFunctions } from './lib/extract/easing_function.js'
+import extractGradientPosition from './lib/extract/gradient_direction.js'
 
 /**
- * Extract all colors from gradient parameters
+ * Extract all colors from gradient parameters using extract functions
  * @param {array} gradientParams Array of gradient parameters
  * @returns {array} Array of colors found in the gradient
  */
 function extractColors(gradientParams) {
-  const colors = []
-  
-  for (const param of gradientParams) {
-    // Skip directions, timing functions, and radial gradient position syntax
-    if (!isDirection(param) && !isTimingFunctionSync(param) && 
-        !param.includes('circle') && !param.includes('ellipse') && 
-        !param.includes('at') && !param.includes('%') && !param.includes('px')) {
-      colors.push(param)
-    }
-  }
-  
-  return colors
+  const gradientString = `linear-gradient(${gradientParams.join(', ')})`
+  const extracted = extractColorStops(gradientString)
+  return extracted.colors || []
 }
 
 /**
- * Find timing functions in gradient parameters
+ * Find timing functions in gradient parameters using extract functions
  * @param {array} gradientParams Array of gradient parameters
  * @returns {array} Array of timing function names found
  */
 function extractTimingFunctions(gradientParams) {
-  return gradientParams.filter(param => isTimingFunctionSync(param))
+  return extractAllEasingFunctions(gradientParams)
 }
 
 /**
@@ -103,9 +97,7 @@ const plugin = function(options = {}) {
                 try {
                   const colors = extractColors(gradientParams)
                   // Find direction or radial gradient position syntax
-                  const direction = gradientParams.find(param => 
-                    isDirection(param) || param.includes('circle') || param.includes('ellipse') || param.includes('at')
-                  )
+                  const direction = extractGradientPosition(gradientParams, node.value)
                   
                   if (colors.length >= 2) {
                     const coordinates = generateCoordinates(options.stops - 1)
@@ -139,32 +131,45 @@ const plugin = function(options = {}) {
                 try {
                   const colors = extractColors(gradientParams)
                   // Find direction or radial gradient position syntax
-                  const direction = gradientParams.find(param => 
-                    isDirection(param) || param.includes('circle') || param.includes('ellipse') || param.includes('at')
-                  )
+                  const direction = extractGradientPosition(gradientParams, node.value)
                   
                   // Use the first timing function found
                   const easingFunction = timingFunctions[0]
                   
                   if (colors.length >= 2) {
-                    const coordinates = generateCoordinates(options.stops - 1)
-                    const colorStops = getOptimalColorStops(
-                      colors,
-                      coordinates,
-                      options.alphaDecimals,
-                      options.colorMode,
-                      easingFunction
-                    )
+                    // Check if any colors are CSS variables or if direction is a CSS variable
+                    const hasCSSVariables = colors.some(color => isCSSVariable(color)) || isCSSVariable(direction || '')
                     
-                    // Update node
-                    node.type = 'word'
-                    if (direction) {
-                      node.value = `${node.value}(${direction}, ${colorStops.join(', ')})`
+                    if (hasCSSVariables) {
+                      // Pass through CSS variables without processing
+                      // Remove timing functions but keep colors and direction as-is
+                      const filteredParams = gradientParams.filter(param => !isTimingFunctionSync(param))
+                      
+                      // Update node to remove timing functions
+                      node.type = 'word'
+                      node.value = `${node.value}(${filteredParams.join(', ')})`
+                      decl.value = parsedValue.toString()
                     } else {
-                      node.value = `${node.value}(${colorStops.join(', ')})`
+                      // Process normally for non-CSS variable colors
+                      const coordinates = generateCoordinates(options.stops - 1)
+                      const colorStops = getOptimalColorStops(
+                        colors,
+                        coordinates,
+                        options.alphaDecimals,
+                        options.colorMode,
+                        easingFunction
+                      )
+                      
+                      // Update node
+                      node.type = 'word'
+                      if (direction) {
+                        node.value = `${node.value}(${direction}, ${colorStops.join(', ')})`
+                      } else {
+                        node.value = `${node.value}(${colorStops.join(', ')})`
+                      }
+                      // Update our declaration value
+                      decl.value = parsedValue.toString()
                     }
-                    // Update our declaration value
-                    decl.value = parsedValue.toString()
                   }
                 } catch (error) {
                   console.log(errorMsg(decl.value))
