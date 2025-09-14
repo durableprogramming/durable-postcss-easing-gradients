@@ -13,10 +13,20 @@ module.exports = function(options = {}) {
   }
   return {
     postcssPlugin: 'easing-gradient',
-    Rule(rule) {
-      // Skip @keyframes rules to avoid corrupting animations
-      if (rule.parent && rule.parent.type === 'atrule' && rule.parent.name === 'keyframes') {
+    AtRule(atRule) {
+      // Skip @keyframes at-rules entirely to avoid corrupting animations
+      if (atRule.name === 'keyframes') {
         return
+      }
+    },
+    Rule(rule) {
+      // Skip @keyframes rules to avoid corrupting animations - check all ancestor at-rules
+      let currentNode = rule.parent
+      while (currentNode) {
+        if (currentNode.type === 'atrule' && currentNode.name === 'keyframes') {
+          return
+        }
+        currentNode = currentNode.parent
       }
       
       rule.walkDecls(decl => {

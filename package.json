@@ -1,6 +1,6 @@
 {
   "name": "durable-postcss-easing-gradients",
-  "version": "3.0.2",
+  "version": "3.0.4",
   "engines": {
     "node": ">=6.0.0"
   },
