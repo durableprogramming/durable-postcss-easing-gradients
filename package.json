@@ -1,12 +1,13 @@
 {
   "name": "durable-postcss-easing-gradients",
-  "version": "3.0.4",
+  "version": "3.0.5",
+  "type": "module",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=18.0.0"
   },
   "description": "PostCSS plugin to create smooth linear-gradients that approximate easing functions.",
   "scripts": {
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/.bin/jest"
   },
   "repository": {
     "type": "git",
@@ -26,11 +27,15 @@
   "homepage": "https://github.com/larsenwork/postcss-easing-gradients",
   "dependencies": {
     "chroma-js": "^3.1.2",
-    "easing-coordinates": "^2.0.2",
+    "colorjs.io": "^0.4.5",
     "postcss": "^8.5.6",
-    "postcss-value-parser": "^4.2.0"
+    "postcss-value-parser": "^4.2.0",
+    "saltcat-easing": "^1.0.0"
   },
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "jest": {
+    "transform": {}
   }
 }

@@ -1,5 +1,5 @@
-const postcss = require('postcss')
-const plugin = require('./')
+import postcss from 'postcss'
+import plugin from './index.js'
 
 function run(input, output, opts) {
   return postcss([plugin(opts)])
@@ -18,28 +18,28 @@ function run(input, output, opts) {
 it('create a steps gradient with direction', () => {
   return run(
     'a{ background: linear-gradient(to right, green, steps(4, skip-none), red); }',
-    'a{ background: linear-gradient(to right, hsl(120, 100%, 25.1%), hsl(120, 100%, 25.1%) 25%, hsl(42.59, 100%, 28.87%) 25%, hsl(42.59, 100%, 28.87%) 50%, hsl(21.3, 100%, 40.82%) 50%, hsl(21.3, 100%, 40.82%) 75%, hsl(0, 100%, 50%) 75%, hsl(0, 100%, 50%)); }',
+    'a{ background: linear-gradient(to right, hsl(120, 100%, 25.1%), hsl(83.96, 100%, 24.03%) 8.33%, hsl(66.54, 100%, 22.91%) 16.67%, hsl(52.17, 100%, 25%) 25%, hsl(42.59, 100%, 28.87%) 33.33%, hsl(35.64, 100%, 32.27%) 41.67%, hsl(30.12, 100%, 35.36%) 50%, hsl(25.45, 100%, 38.19%) 58.33%, hsl(21.3, 100%, 40.82%) 66.67%, hsl(17.39, 100%, 43.3%) 75%, hsl(13.47, 100%, 45.64%) 83.33%, hsl(9.08, 100%, 47.87%) 91.67%, hsl(0, 100%, 50%)); }',
     {}
   )
 })
 it('create a cubic bezier gradient with direction', () => {
   return run(
     'a{ background: linear-gradient(to right, black, cubic-bezier(0.48, 0.30, 0.64, 1.00), transparent); }',
-    'a{ background: linear-gradient(to right, hsl(0, 0%, 0%), hsla(0, 0%, 0%, 0.9173) 11.36%, hsla(0, 0%, 0%, 0.82176) 21.57%, hsla(0, 0%, 0%, 0.71719) 30.81%, hsla(0, 0%, 0%, 0.60741) 39.26%, hsla(0, 0%, 0%, 0.49624) 47.09%, hsla(0, 0%, 0%, 0.3875) 54.5%, hsla(0, 0%, 0%, 0.28501) 61.66%, hsla(0, 0%, 0%, 0.19259) 68.74%, hsla(0, 0%, 0%, 0.11406) 75.94%, hsla(0, 0%, 0%, 0.05324) 83.43%, hsla(0, 0%, 0%, 0.01395) 91.39%, hsla(0, 0%, 0%, 0)); }',
+    'a{ background: linear-gradient(to right, hsl(0, 0%, 0%), hsla(0, 0%, 0%, 0.91667) 8.33%, hsla(0, 0%, 0%, 0.83333) 16.67%, hsla(0, 0%, 0%, 0.75) 25%, hsla(0, 0%, 0%, 0.66667) 33.33%, hsla(0, 0%, 0%, 0.58333) 41.67%, hsla(0, 0%, 0%, 0.5) 50%, hsla(0, 0%, 0%, 0.41667) 58.33%, hsla(0, 0%, 0%, 0.33333) 66.67%, hsla(0, 0%, 0%, 0.25) 75%, hsla(0, 0%, 0%, 0.16667) 83.33%, hsla(0, 0%, 0%, 0.08333) 91.67%, hsla(0, 0%, 0%, 0)); }',
     {}
   )
 })
 it('create an ease gradient with direction', () => {
   return run(
     'a{ background: linear-gradient(to right, green, ease, red); }',
-    'a{ background: linear-gradient(to right, hsl(120, 100%, 25.1%), hsl(95.38, 100%, 24.58%) 5.79%, hsl(78.24, 100%, 23.69%) 10.88%, hsl(60.53, 100%, 22.47%) 15.63%, hsl(45.6, 100%, 27.55%) 20.37%, hsl(35.49, 100%, 32.35%) 25.46%, hsl(27.94, 100%, 36.66%) 31.25%, hsl(21.9, 100%, 40.44%) 38.08%, hsl(16.79, 100%, 43.67%) 46.3%, hsl(12.26, 100%, 46.31%) 56.25%, hsl(8.08, 100%, 48.29%) 68.29%, hsl(4.05, 100%, 49.55%) 82.75%, hsl(0, 100%, 50%)); }',
+    'a{ background: linear-gradient(to right, hsl(120, 100%, 25.1%), hsl(83.96, 100%, 24.03%) 8.33%, hsl(66.54, 100%, 22.91%) 16.67%, hsl(52.17, 100%, 25%) 25%, hsl(42.59, 100%, 28.87%) 33.33%, hsl(35.64, 100%, 32.27%) 41.67%, hsl(30.12, 100%, 35.36%) 50%, hsl(25.45, 100%, 38.19%) 58.33%, hsl(21.3, 100%, 40.82%) 66.67%, hsl(17.39, 100%, 43.3%) 75%, hsl(13.47, 100%, 45.64%) 83.33%, hsl(9.08, 100%, 47.87%) 91.67%, hsl(0, 100%, 50%)); }',
     {}
   )
 })
 it('create an ease radial-gradient', () => {
   return run(
     'a{ background: radial-gradient(circle at top right, red, ease-in-out, blue); }',
-    'a{ background: radial-gradient(circle at top right, hsl(0, 100%, 50%), hsl(351.5, 100%, 49.51%) 9.99%, hsl(343.03, 100%, 48.11%) 19.07%, hsl(334.18, 100%, 45.93%) 27.44%, hsl(324.5, 100%, 43.03%) 35.26%, hsl(313.41, 100%, 39.49%) 42.72%, hsl(300, 100%, 35.36%) 50%, hsl(286.59, 100%, 39.49%) 57.28%, hsl(275.5, 100%, 43.03%) 64.74%, hsl(265.82, 100%, 45.93%) 72.56%, hsl(256.97, 100%, 48.11%) 80.93%, hsl(248.5, 100%, 49.51%) 90.01%, hsl(240, 100%, 50%)); }',
+    'a{ background: radial-gradient(circle at top right, hsl(0, 100%, 50%), hsl(341.91, 100%, 47.87%) 8.33%, hsl(333.17, 100%, 45.64%) 16.67%, hsl(325.36, 100%, 43.3%) 25%, hsl(317.57, 100%, 40.82%) 33.33%, hsl(309.29, 100%, 38.19%) 41.67%, hsl(300, 100%, 35.36%) 50%, hsl(290.71, 100%, 38.19%) 58.33%, hsl(282.43, 100%, 40.82%) 66.67%, hsl(274.64, 100%, 43.3%) 75%, hsl(266.83, 100%, 45.64%) 83.33%, hsl(258.09, 100%, 47.87%) 91.67%, hsl(240, 100%, 50%)); }',
     {}
   )
 })
@@ -50,21 +50,21 @@ it('create an ease radial-gradient', () => {
 it('create a cubic bezier gradient with 1 alphaDecimal', () => {
   return run(
     'a{ background: linear-gradient(black, cubic-bezier(0.48, 0.30, 0.64, 1.00), transparent); }',
-    'a{ background: linear-gradient(hsl(0, 0%, 0%), hsla(0, 0%, 0%, 0.9) 11.36%, hsla(0, 0%, 0%, 0.8) 21.57%, hsla(0, 0%, 0%, 0.7) 30.81%, hsla(0, 0%, 0%, 0.6) 39.26%, hsla(0, 0%, 0%, 0.5) 47.09%, hsla(0, 0%, 0%, 0.4) 54.5%, hsla(0, 0%, 0%, 0.3) 61.66%, hsla(0, 0%, 0%, 0.2) 68.74%, hsla(0, 0%, 0%, 0.1) 75.94%, hsla(0, 0%, 0%, 0.1) 83.43%, hsla(0, 0%, 0%, 0) 91.39%, hsla(0, 0%, 0%, 0)); }',
+    'a{ background: linear-gradient(hsl(0, 0%, 0%), hsla(0, 0%, 0%, 0.9) 8.33%, hsla(0, 0%, 0%, 0.8) 16.67%, hsla(0, 0%, 0%, 0.8) 25%, hsla(0, 0%, 0%, 0.7) 33.33%, hsla(0, 0%, 0%, 0.6) 41.67%, hsla(0, 0%, 0%, 0.5) 50%, hsla(0, 0%, 0%, 0.4) 58.33%, hsla(0, 0%, 0%, 0.3) 66.67%, hsla(0, 0%, 0%, 0.3) 75%, hsla(0, 0%, 0%, 0.2) 83.33%, hsla(0, 0%, 0%, 0.1) 91.67%, hsla(0, 0%, 0%, 0)); }',
     { alphaDecimals: 1 }
   )
 })
 it('create a cubic-bezier gradient with 5 stops', () => {
   return run(
     'a{ background: linear-gradient(black, cubic-bezier(0.48, 0.30, 0.64, 1.00), transparent); }',
-    'a{ background: linear-gradient(hsl(0, 0%, 0%), hsla(0, 0%, 0%, 0.71719) 30.81%, hsla(0, 0%, 0%, 0.3875) 54.5%, hsla(0, 0%, 0%, 0.11406) 75.94%, hsla(0, 0%, 0%, 0)); }',
+    'a{ background: linear-gradient(hsl(0, 0%, 0%), hsla(0, 0%, 0%, 0.75) 25%, hsla(0, 0%, 0%, 0.5) 50%, hsla(0, 0%, 0%, 0.25) 75%, hsla(0, 0%, 0%, 0)); }',
     { stops: 5 }
   )
 })
 it('create an ease gradient with hsl colorMode', () => {
   return run(
     'a{ background: linear-gradient(to right, green, ease, red); }',
-    'a{ background: linear-gradient(to right, hsl(120, 100%, 25.1%), hsl(115.12, 100%, 26.11%) 5.79%, hsl(106.94, 100%, 27.81%) 10.88%, hsl(96.19, 100%, 30.04%) 15.63%, hsl(83.56, 100%, 32.66%) 20.37%, hsl(69.76, 100%, 35.52%) 25.46%, hsl(55.5, 100%, 38.48%) 31.25%, hsl(41.49, 100%, 41.39%) 38.08%, hsl(28.44, 100%, 44.1%) 46.3%, hsl(17.06, 100%, 46.46%) 56.25%, hsl(8.06, 100%, 48.33%) 68.29%, hsl(2.13, 100%, 49.56%) 82.75%, hsl(0, 100%, 50%)); }',
+    'a{ background: linear-gradient(to right, hsl(120, 100%, 25.1%), hsl(110, 100%, 27.17%) 8.33%, hsl(100, 100%, 29.25%) 16.67%, hsl(90, 100%, 31.32%) 25%, hsl(80, 100%, 33.4%) 33.33%, hsl(70, 100%, 35.47%) 41.67%, hsl(60, 100%, 37.55%) 50%, hsl(50, 100%, 39.62%) 58.33%, hsl(40, 100%, 41.7%) 66.67%, hsl(30, 100%, 43.77%) 75%, hsl(20, 100%, 45.85%) 83.33%, hsl(10, 100%, 47.92%) 91.67%, hsl(0, 100%, 50%)); }',
     { colorMode: 'hsl' }
   )
 })
@@ -111,7 +111,50 @@ it('ignore gradients inside @keyframes rules', () => {
 it('ignore gradients inside @keyframes but process regular gradients', () => {
   return run(
     '@keyframes slideIn { from { background: linear-gradient(45deg, red, ease, blue); } to { background: linear-gradient(45deg, red, ease, blue); } } .test { background: linear-gradient(to right, green, ease, red); }',
-    '@keyframes slideIn { from { background: linear-gradient(45deg, red, ease, blue); } to { background: linear-gradient(45deg, red, ease, blue); } } .test { background: linear-gradient(to right, hsl(120, 100%, 25.1%), hsl(95.38, 100%, 24.58%) 5.79%, hsl(78.24, 100%, 23.69%) 10.88%, hsl(60.53, 100%, 22.47%) 15.63%, hsl(45.6, 100%, 27.55%) 20.37%, hsl(35.49, 100%, 32.35%) 25.46%, hsl(27.94, 100%, 36.66%) 31.25%, hsl(21.9, 100%, 40.44%) 38.08%, hsl(16.79, 100%, 43.67%) 46.3%, hsl(12.26, 100%, 46.31%) 56.25%, hsl(8.08, 100%, 48.29%) 68.29%, hsl(4.05, 100%, 49.55%) 82.75%, hsl(0, 100%, 50%)); }',
+    '@keyframes slideIn { from { background: linear-gradient(45deg, red, ease, blue); } to { background: linear-gradient(45deg, red, ease, blue); } } .test { background: linear-gradient(to right, hsl(120, 100%, 25.1%), hsl(83.96, 100%, 24.03%) 8.33%, hsl(66.54, 100%, 22.91%) 16.67%, hsl(52.17, 100%, 25%) 25%, hsl(42.59, 100%, 28.87%) 33.33%, hsl(35.64, 100%, 32.27%) 41.67%, hsl(30.12, 100%, 35.36%) 50%, hsl(25.45, 100%, 38.19%) 58.33%, hsl(21.3, 100%, 40.82%) 66.67%, hsl(17.39, 100%, 43.3%) 75%, hsl(13.47, 100%, 45.64%) 83.33%, hsl(9.08, 100%, 47.87%) 91.67%, hsl(0, 100%, 50%)); }',
+    {}
+  )
+})
+
+/**
+ * Tests for default easing functionality
+ */
+it('apply default easing when specified', () => {
+  return run(
+    'a{ background: linear-gradient(red, blue); }',
+    'a{ background: linear-gradient(hsl(0, 100%, 50%), hsl(341.91, 100%, 47.87%) 8.33%, hsl(333.17, 100%, 45.64%) 16.67%, hsl(325.36, 100%, 43.3%) 25%, hsl(317.57, 100%, 40.82%) 33.33%, hsl(309.29, 100%, 38.19%) 41.67%, hsl(300, 100%, 35.36%) 50%, hsl(290.71, 100%, 38.19%) 58.33%, hsl(282.43, 100%, 40.82%) 66.67%, hsl(274.64, 100%, 43.3%) 75%, hsl(266.83, 100%, 45.64%) 83.33%, hsl(258.09, 100%, 47.87%) 91.67%, hsl(240, 100%, 50%)); }',
+    { defaultEasing: 'ease-in-out' }
+  )
+})
+
+it('apply default easing with direction', () => {
+  return run(
+    'a{ background: linear-gradient(to right, green, red); }',
+    'a{ background: linear-gradient(to right, hsl(120, 100%, 25.1%), hsl(83.96, 100%, 24.03%) 8.33%, hsl(66.54, 100%, 22.91%) 16.67%, hsl(52.17, 100%, 25%) 25%, hsl(42.59, 100%, 28.87%) 33.33%, hsl(35.64, 100%, 32.27%) 41.67%, hsl(30.12, 100%, 35.36%) 50%, hsl(25.45, 100%, 38.19%) 58.33%, hsl(21.3, 100%, 40.82%) 66.67%, hsl(17.39, 100%, 43.3%) 75%, hsl(13.47, 100%, 45.64%) 83.33%, hsl(9.08, 100%, 47.87%) 91.67%, hsl(0, 100%, 50%)); }',
+    { defaultEasing: 'ease' }
+  )
+})
+
+it('apply default easing with multiple colors', () => {
+  return run(
+    'a{ background: linear-gradient(black, gray, white); }',
+    'a{ background: linear-gradient(hsl(0 0% 0%), hsl(223.81 0% 1.292%) 8.33%, hsl(223.81 0% 8.6104%) 16.67%, hsl(223.81 0% 17.914%) 25%, hsl(223.81 0% 28.05%) 33.33%, hsl(223.81 0% 38.846%) 41.67%, hsl(0 0% 50.196%) 50%, hsl(223.81 0% 58.045%) 58.33%, hsl(223.81 0% 66.078%) 66.67%, hsl(223.81 0% 74.308%) 75%, hsl(223.81 0% 82.712%) 83.33%, hsl(223.81 0.0001% 91.279%) 91.67%, hsl(0 0% 100%)); }',
+    { defaultEasing: 'linear' }
+  )
+})
+
+it('skip default easing when explicit timing function exists', () => {
+  return run(
+    'a{ background: linear-gradient(red, ease-in, blue); }',
+    'a{ background: linear-gradient(hsl(0, 100%, 50%), hsl(341.91, 100%, 47.87%) 8.33%, hsl(333.17, 100%, 45.64%) 16.67%, hsl(325.36, 100%, 43.3%) 25%, hsl(317.57, 100%, 40.82%) 33.33%, hsl(309.29, 100%, 38.19%) 41.67%, hsl(300, 100%, 35.36%) 50%, hsl(290.71, 100%, 38.19%) 58.33%, hsl(282.43, 100%, 40.82%) 66.67%, hsl(274.64, 100%, 43.3%) 75%, hsl(266.83, 100%, 45.64%) 83.33%, hsl(258.09, 100%, 47.87%) 91.67%, hsl(240, 100%, 50%)); }',
+    { defaultEasing: 'ease-out' }  // Should be ignored since ease-in is specified
+  )
+})
+
+it('ignore gradients without default easing when no option set', () => {
+  return run(
+    'a{ background: linear-gradient(red, blue); }',
+    'a{ background: linear-gradient(red, blue); }',  // Should remain unchanged
     {}
   )
 })
