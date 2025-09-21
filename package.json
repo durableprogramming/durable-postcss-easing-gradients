@@ -1,6 +1,6 @@
 {
   "name": "durable-postcss-easing-gradients",
-  "version": "3.0.9",
+  "version": "3.1.0",
   "type": "module",
   "main": "index.js",
   "engines": {
@@ -27,14 +27,15 @@
   },
   "homepage": "https://github.com/larsenwork/postcss-easing-gradients",
   "dependencies": {
-    "chroma-js": "^3.1.2",
-    "colorjs.io": "^0.4.5",
     "mocha": "^11.7.2",
     "postcss": "^8.5.6",
-    "postcss-value-parser": "^4.2.0",
-    "saltcat-easing": "^1.0.0"
+    "saltcat-color-palette": "^0.1.1",
+    "saltcat-color-tokens": "^0.1.1",
+    "saltcat-easing": "^0.1.0",
+    "saltcat-generate-gradient-css": "^0.1.1",
+    "saltcat-gradient-parser": "^1.1.2"
   },
   "devDependencies": {
-    "vitest": "^2.0.0"
+    "vitest": "^2.1.9"
   }
 }
